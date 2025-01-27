@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ed0375f2-03bd-4c63-adfa-6c21c652cc48",
+    "products": [
+      {
+        "product": ":cid",
+        "quantity": 1
+      },
+      {
+        "product": ":auto",
+        "quantity": 3
+      },
+      {
+        "product": ":milanesa",
+        "quantity": 1
+      },
+      {
+        "product": ":milanesa con papas",
+        "quantity": 2
+      }
+    ]
+  }
+]
