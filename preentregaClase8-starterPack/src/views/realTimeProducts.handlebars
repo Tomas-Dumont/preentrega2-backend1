@@ -1,0 +1,41 @@
+<h1>Productos en Tiempo Real</h1>
+<ul id="productsList">
+  {{#each products}}
+    <li>{{this.title}} - {{this.price}} - <button class="delete-btn" data-id="{{this.id}}">Eliminar</button></li>
+  {{/each}}
+</ul>
+<button id="addProductBtn">Añadir Producto</button>
+
+<script>
+  const socket = io();
+
+  // Escuchar eventos de WebSocket para actualizar la lista de productos
+  socket.on('updateProducts', (products) => {
+    const productList = document.getElementById('productsList');
+    productList.innerHTML = ''; // Limpiar la lista actual
+
+    products.forEach((product) => {
+      const li = document.createElement('li');
+      li.innerHTML = `${product.title} - ${product.price} - <button class="delete-btn" data-id="${product.id}">Eliminar</button>`;
+      productList.appendChild(li);
+    });
+  });
+
+  // Manejar la eliminación de productos
+  document.getElementById('productsList').addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-btn')) {
+      const productId = e.target.getAttribute('data-id');
+      socket.emit('deleteProduct', productId); // Emitir un evento de eliminación
+    }
+  });
+
+  // Manejar la creación de productos
+  document.getElementById('addProductBtn').addEventListener('click', () => {
+    const newProduct = {
+      title: 'Nuevo Producto',
+      price: Math.floor(Math.random() * 100),
+      // Otros campos de tu producto...
+    };
+    socket.emit('addProduct', newProduct); // Emitir un evento para agregar producto
+  });
+</script>

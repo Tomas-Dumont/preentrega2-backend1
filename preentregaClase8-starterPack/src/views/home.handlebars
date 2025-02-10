@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Lista de Productos</h1>
+  
+  <ul id="product-list">
+    {{#each products}}
+      <li id="product-{{this.id}}">{{this.title}} - ${{this.price}}</li>
+    {{/each}}
+  </ul>
+
+  <script>
+    const socket = io()
+
+    // Escuchar eventos para añadir, actualizar o eliminar productos
+    socket.on('new-product', (product) => {
+      const productList = document.getElementById('product-list')
+      const newProduct = document.createElement('li')
+      newProduct.id = `product-${product.id}`
+      newProduct.textContent = `${product.title} - $${product.price}`
+      productList.appendChild(newProduct)
+    })
+
+    socket.on('update-product', (updatedProduct) => {
+      const productElement = document.getElementById(`product-${updatedProduct.id}`)
+      if (productElement) {
+        productElement.textContent = `${updatedProduct.title} - $${updatedProduct.price}`
+      }
+    })
+
+    socket.on('delete-product', (productId) => {
+      const productElement = document.getElementById(`product-${productId}`)
+      if (productElement) {
+        productElement.remove()
+      }
+    })
+  </script>
+</body>
+</html>
